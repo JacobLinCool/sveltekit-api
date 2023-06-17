@@ -1,6 +1,8 @@
 import type { RequestEvent, ServerLoadEvent } from "@sveltejs/kit";
 import { json } from "@sveltejs/kit";
-import { log } from "./log.js";
+import { log as _log } from "./log.js";
+
+const log = _log.extend("load2api");
 
 /**
  * Transform a server-side `load` function into an API endpoint
