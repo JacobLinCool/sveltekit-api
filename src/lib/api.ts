@@ -1,7 +1,7 @@
 import { fromZodError } from "zod-validation-error";
-import { OpenAPIRegistry, OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import type { OpenAPIObjectConfig } from "@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator.js";
-import { error, HttpError, json } from "@sveltejs/kit";
+import { error, json } from "@sveltejs/kit";
+import type { HttpError } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
 import { log as _log } from "./log.js";
 import { z } from "./zod.js";
@@ -109,7 +109,10 @@ export class API {
 	}
 
 	async openapi(evt?: RequestEvent) {
-		const registry = new OpenAPIRegistry();
+		// using normal import for @asteasolutions/zod-to-openapi causes some problem to generate d.ts
+		const _m = "@asteasolutions/zod-to-openapi";
+		const m = await import(/* @vite-ignore */ _m);
+		const registry = new m.OpenAPIRegistry();
 
 		for (const route of Object.keys(this.routes)) {
 			const module = await this.parse_module(route);
@@ -163,7 +166,7 @@ export class API {
 			});
 		}
 
-		const generator = new OpenApiGeneratorV3(registry.definitions);
+		const generator = new m.OpenApiGeneratorV3(registry.definitions);
 		const openapi = generator.generateDocument(
 			evt
 				? {
