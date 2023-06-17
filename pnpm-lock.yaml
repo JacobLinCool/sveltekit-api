@@ -6,7 +6,7 @@ settings:
 
 dependencies:
     "@asteasolutions/zod-to-openapi":
-        specifier: ^5.1.0
+        specifier: ^5.0.0
         version: 5.1.0(zod@3.21.4)
     "@sveltejs/kit":
         specifier: ^1.0.0
@@ -18,7 +18,7 @@ dependencies:
         specifier: ^3.0.0
         version: 3.21.4
     zod-validation-error:
-        specifier: ^1.3.0
+        specifier: ^1.0.0
         version: 1.3.0(zod@3.21.4)
 
 devDependencies:
