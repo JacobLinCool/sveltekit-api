@@ -1,0 +1,76 @@
+{
+	"name": "sveltekit-api",
+	"version": "0.0.0",
+	"description": "Utilities to create API endpoints in SvelteKit.",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/JacobLinCool/sveltekit-api.git"
+	},
+	"homepage": "https://github.com/JacobLinCool/sveltekit-api",
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"dependencies": {
+		"debug": "^4.0.0"
+	},
+	"peerDependencies": {
+		"@sveltejs/kit": "^1.0.0",
+		"svelte": "^3.0.0 || ^4.0.0"
+	},
+	"devDependencies": {
+		"@changesets/changelog-github": "^0.4.8",
+		"@changesets/cli": "^2.26.1",
+		"@sveltejs/adapter-auto": "^2.1.0",
+		"@sveltejs/package": "^2.0.2",
+		"@trivago/prettier-plugin-sort-imports": "^4.1.1",
+		"@types/better-sqlite3": "^7.6.4",
+		"@types/debug": "^4.1.8",
+		"@typescript-eslint/eslint-plugin": "^5.59.11",
+		"@typescript-eslint/parser": "^5.59.11",
+		"changeset": "^0.2.6",
+		"eslint": "^8.43.0",
+		"eslint-config-prettier": "^8.8.0",
+		"eslint-plugin-svelte": "^2.30.0",
+		"husky": "^8.0.3",
+		"lint-staged": "^13.2.2",
+		"prettier": "^2.8.8",
+		"prettier-plugin-svelte": "^2.10.1",
+		"publint": "^0.1.12",
+		"svelte": "^3.59.1",
+		"svelte-check": "^3.4.3",
+		"tslib": "^2.5.3",
+		"typescript": "^5.1.3",
+		"vite": "^4.3.9"
+	},
+	"scripts": {
+		"prepare": "husky install",
+		"dev": "vite dev",
+		"build": "vite build && pnpm run package",
+		"preview": "vite preview",
+		"package": "svelte-kit sync && svelte-package && publint",
+		"prepublishOnly": "pnpm run package",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --ignore-path .gitignore --check **/*.{ts,js,json,yaml,yml,svelte,html} && eslint .",
+		"format": "prettier --ignore-path .gitignore --write **/*.{ts,js,json,yaml,yml,svelte,html}",
+		"changeset": "changeset"
+	},
+	"lint-staged": {
+		"*.{ts,js,json,yaml,yml,svelte,html}": [
+			"prettier --write"
+		]
+	},
+	"packageManager": "pnpm@8.6.2"
+}
