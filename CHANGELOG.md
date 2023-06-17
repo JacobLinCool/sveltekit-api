@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.1
+
+### Patch Changes
+
+-   [`e70ac9e`](https://github.com/JacobLinCool/sveltekit-api/commit/e70ac9e3e626248c5e4416133d5aa5b5e383eb20) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix TypeScript definitions for API
+
 ## 0.2.0
 
 ### Minor Changes
