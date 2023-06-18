@@ -10,6 +10,23 @@ const log = _log.extend("api");
 
 export const METHOD = /^(GET|POST|PUT|DELETE|PATCH|OPTIONS)$/;
 
+export interface APIRoute<
+	P extends z.ZodType = z.ZodType,
+	Q extends z.ZodType = z.ZodType,
+	I extends z.ZodType = z.ZodType,
+	O extends z.ZodType = z.ZodType,
+> {
+	Param?: P;
+	Query?: Q;
+	Input?: I;
+	Output?: O;
+	Error?: { [x: string]: HttpError };
+	default: (
+		inputs: z.infer<I> & z.infer<Q> & z.infer<P>,
+		evt: RequestEvent,
+	) => Promise<z.infer<O>>;
+}
+
 export class API {
 	public routes: Record<string, () => Promise<unknown>>;
 	public config: OpenAPIObjectConfig;
@@ -97,6 +114,22 @@ export class API {
 		return res;
 	}
 
+	/**
+	 * Parse inputs from request event
+	 * @param id API route ID with method, e.g. `./user/[id]/GET`
+	 * @param evt Request event
+	 * @returns Parsed inputs
+	 */
+	async parse(id: string, evt: RequestEvent): Promise<{ [x: string]: unknown }>;
+	async parse(module: APIRoute, evt: RequestEvent): Promise<{ [x: string]: unknown }>;
+	async parse(id: string | APIRoute, evt: RequestEvent): Promise<{ [x: string]: unknown }> {
+		const module = typeof id === "string" ? await this.parse_module(id) : id;
+		const param = await this.parse_param(evt, module);
+		const query = await this.parse_query(evt, module);
+		const body = await this.parse_body(evt, module);
+		return { ...body, ...query, ...param };
+	}
+
 	handlers() {
 		return {
 			GET: async (evt: RequestEvent) => this.handle(evt),
@@ -149,6 +182,26 @@ export class API {
 									content: {
 										"application/json": {
 											schema: module.output as never,
+										},
+									},
+								},
+						  }
+						: undefined),
+					...(module.query || module.param || module.body
+						? {
+								"400": {
+									description:
+										"Invalid input (path parameters, query string, or body)",
+									content: {
+										"application/json": {
+											schema: {
+												type: "object",
+												properties: {
+													message: {
+														type: "string",
+													},
+												},
+											},
 										},
 									},
 								},
