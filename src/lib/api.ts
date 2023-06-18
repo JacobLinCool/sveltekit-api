@@ -11,20 +11,17 @@ const log = _log.extend("api");
 export const METHOD = /^(GET|POST|PUT|DELETE|PATCH|OPTIONS)$/;
 
 export interface APIRoute<
-	P extends z.ZodType = z.ZodType,
-	Q extends z.ZodType = z.ZodType,
-	I extends z.ZodType = z.ZodType,
-	O extends z.ZodType = z.ZodType,
+	P extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	Q extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	I extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	O extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	E extends Partial<{ [x: string]: HttpError }> = Partial<{ [x: string]: HttpError }>,
 > {
 	Param?: P;
 	Query?: Q;
 	Input?: I;
 	Output?: O;
-	Error?: { [x: string]: HttpError };
-	default: (
-		inputs: z.infer<I> & z.infer<Q> & z.infer<P>,
-		evt: RequestEvent,
-	) => Promise<z.infer<O>>;
+	Error?: E;
 }
 
 export class API {
@@ -120,8 +117,15 @@ export class API {
 	 * @param evt Request event
 	 * @returns Parsed inputs
 	 */
+	async parse<T extends APIRoute>(
+		module: T,
+		evt: RequestEvent,
+	): Promise<
+		(T["Input"] extends z.ZodType<infer I> ? I : Record<never, never>) &
+			(T["Query"] extends z.ZodType<infer Q> ? Q : Record<never, never>) &
+			(T["Param"] extends z.ZodType<infer P> ? P : Record<never, never>)
+	>;
 	async parse(id: string, evt: RequestEvent): Promise<{ [x: string]: unknown }>;
-	async parse(module: APIRoute, evt: RequestEvent): Promise<{ [x: string]: unknown }>;
 	async parse(id: string | APIRoute, evt: RequestEvent): Promise<{ [x: string]: unknown }> {
 		const module = typeof id === "string" ? await this.parse_module(id) : id;
 		const param = await this.parse_param(evt, module);
