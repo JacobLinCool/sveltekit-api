@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.4
+
+### Patch Changes
+
+-   [`3d38e37`](https://github.com/JacobLinCool/sveltekit-api/commit/3d38e3713ceaaa4b35216f1e81a6d5c12ca165be) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix return types for `API.parse`
+
 ## 0.2.3
 
 ### Patch Changes
