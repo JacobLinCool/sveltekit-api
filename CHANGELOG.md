@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.2
+
+### Patch Changes
+
+-   [`282dc88`](https://github.com/JacobLinCool/sveltekit-api/commit/282dc884d3a9412de52c7d61f5fe5a44b780f814) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Pass request event to endpoint handler
+
 ## 0.2.1
 
 ### Patch Changes
