@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.5
+
+### Patch Changes
+
+-   [`b616e52`](https://github.com/JacobLinCool/sveltekit-api/commit/b616e5245cce36c09143f0cb4434263c27201c2c) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Simplify input parser return types
+
 ## 0.2.4
 
 ### Patch Changes
