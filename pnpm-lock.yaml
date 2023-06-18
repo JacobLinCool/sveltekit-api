@@ -14,6 +14,9 @@ dependencies:
     debug:
         specifier: ^4.0.0
         version: 4.3.4
+    type-fest:
+        specifier: ^3.0.0
+        version: 3.12.0
     zod:
         specifier: ^3.0.0
         version: 3.21.4
@@ -5171,6 +5174,14 @@ packages:
             }
         engines: { node: ">=8" }
         dev: true
+
+    /type-fest@3.12.0:
+        resolution:
+            {
+                integrity: sha512-qj9wWsnFvVEMUDbESiilKeXeHL7FwwiFcogfhfyjmvT968RXSvnl23f1JOClTHYItsi7o501C/7qVllscUP3oA==,
+            }
+        engines: { node: ">=14.16" }
+        dev: false
 
     /typed-array-length@1.0.4:
         resolution:

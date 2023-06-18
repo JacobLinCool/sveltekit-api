@@ -1,3 +1,4 @@
+import type { Simplify } from "type-fest";
 import { fromZodError } from "zod-validation-error";
 import type { OpenAPIObjectConfig } from "@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator.js";
 import { error, json } from "@sveltejs/kit";
@@ -121,9 +122,11 @@ export class API {
 		module: T,
 		evt: RequestEvent,
 	): Promise<
-		(T["Input"] extends z.ZodType<infer I> ? I : Record<never, never>) &
-			(T["Query"] extends z.ZodType<infer Q> ? Q : Record<never, never>) &
-			(T["Param"] extends z.ZodType<infer P> ? P : Record<never, never>)
+		Simplify<
+			(T["Input"] extends z.ZodType ? z.infer<T["Input"]> : Record<never, never>) &
+				(T["Query"] extends z.ZodType ? z.infer<T["Query"]> : Record<never, never>) &
+				(T["Param"] extends z.ZodType ? z.infer<T["Param"]> : Record<never, never>)
+		>
 	>;
 	async parse(id: string, evt: RequestEvent): Promise<{ [x: string]: unknown }>;
 	async parse(id: string | APIRoute, evt: RequestEvent): Promise<{ [x: string]: unknown }> {
