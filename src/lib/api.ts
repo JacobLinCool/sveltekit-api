@@ -83,7 +83,7 @@ export class API {
 		const query = await this.parse_query(evt, module);
 		const body = await this.parse_body(evt, module);
 
-		const output = await module.default({ ...body, ...query, ...param });
+		const output = await module.default({ ...body, ...query, ...param }, evt);
 
 		const res = json(output, {
 			headers: cors
