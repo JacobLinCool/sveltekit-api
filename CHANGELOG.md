@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.3
+
+### Patch Changes
+
+-   [`6005a51`](https://github.com/JacobLinCool/sveltekit-api/commit/6005a511bd98da8b270f73b9c3603995e44ca209) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Use `API.parse` method to parse inputs from request event
+
 ## 0.2.2
 
 ### Patch Changes
