@@ -1,6 +1,6 @@
 {
 	"name": "sveltekit-api",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "Utilities to create API endpoints in SvelteKit.",
 	"license": "MIT",
 	"repository": {
