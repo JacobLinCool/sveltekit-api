@@ -1,5 +1,13 @@
 # sveltekit-api
 
+## 0.2.7
+
+### Patch Changes
+
+-   [`c6b74db`](https://github.com/JacobLinCool/sveltekit-api/commit/c6b74dbf00720545e9e9dc88f620be9c043460e2) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Improve fallback type inference for input parser with route module
+
+-   [`730035f`](https://github.com/JacobLinCool/sveltekit-api/commit/730035f8e0bc117013faaaf62f00f3e50e7647a4) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Mark `extra` parameter of `API.parse` optional
+
 ## 0.2.6
 
 ### Patch Changes
