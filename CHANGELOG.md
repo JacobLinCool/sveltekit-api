@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.9
+
+### Patch Changes
+
+-   [`9ac33f5`](https://github.com/JacobLinCool/sveltekit-api/commit/9ac33f56b549eef1d32ac09b75ec85ddf32ad37e) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Make API servers overwritable
+
 ## 0.2.8
 
 ### Patch Changes
