@@ -1,5 +1,13 @@
 # sveltekit-api
 
+## 0.2.6
+
+### Patch Changes
+
+-   [`e71e608`](https://github.com/JacobLinCool/sveltekit-api/commit/e71e608711b44ff0ff1915c591a21cc41a5a469d) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Extra registry modifier
+
+-   [`3f51fc0`](https://github.com/JacobLinCool/sveltekit-api/commit/3f51fc036656846ef1addb942ec969f2406bc3cd) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Support additional fallback inputs
+
 ## 0.2.5
 
 ### Patch Changes
