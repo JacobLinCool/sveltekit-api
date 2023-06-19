@@ -137,7 +137,7 @@ export class API {
 	async parse<T extends APIRoute>(
 		module: T,
 		evt: RequestEvent,
-		extra: {
+		extra?: {
 			fallback?: Partial<Record<"body" | "query" | "param", Record<never, never>>>;
 		},
 	): Promise<
@@ -157,7 +157,7 @@ export class API {
 	async parse(
 		id: string,
 		evt: RequestEvent,
-		extra: {
+		extra?: {
 			fallback?: Partial<Record<"body" | "query" | "param", Record<never, never>>>;
 		},
 	): Promise<{ [x: string]: unknown }>;
