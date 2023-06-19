@@ -138,7 +138,11 @@ export class API {
 		module: T,
 		evt: RequestEvent,
 		extra?: {
-			fallback?: Partial<Record<"body" | "query" | "param", Record<never, never>>>;
+			fallback?: {
+				body?: T["Input"] extends z.ZodType ? z.infer<T["Input"]> : never;
+				query?: T["Query"] extends z.ZodType ? z.infer<T["Query"]> : never;
+				param?: T["Param"] extends z.ZodType ? z.infer<T["Param"]> : never;
+			};
 		},
 	): Promise<
 		Simplify<
