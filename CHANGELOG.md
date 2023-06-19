@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.8
+
+### Patch Changes
+
+-   [`9963854`](https://github.com/JacobLinCool/sveltekit-api/commit/9963854093096fe43368f50d44016830f1230405) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Mark fallback inputs partial
+
 ## 0.2.7
 
 ### Patch Changes
