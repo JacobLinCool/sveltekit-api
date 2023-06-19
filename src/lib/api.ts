@@ -139,9 +139,9 @@ export class API {
 		evt: RequestEvent,
 		extra?: {
 			fallback?: {
-				body?: T["Input"] extends z.ZodType ? z.infer<T["Input"]> : never;
-				query?: T["Query"] extends z.ZodType ? z.infer<T["Query"]> : never;
-				param?: T["Param"] extends z.ZodType ? z.infer<T["Param"]> : never;
+				body?: T["Input"] extends z.ZodType ? Partial<z.infer<T["Input"]>> : never;
+				query?: T["Query"] extends z.ZodType ? Partial<z.infer<T["Query"]>> : never;
+				param?: T["Param"] extends z.ZodType ? Partial<z.infer<T["Param"]>> : never;
 			};
 		},
 	): Promise<
