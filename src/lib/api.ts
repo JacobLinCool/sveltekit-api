@@ -62,7 +62,17 @@ export class API {
 		this.register = register;
 	}
 
-	async handle(evt: RequestEvent, { cors = true } = {}): Promise<Response> {
+	async handle(
+		evt: RequestEvent,
+		{
+			cors = true,
+			fallback = {
+				body: {},
+				query: {},
+				param: {},
+			} as Partial<Record<"body" | "query" | "param", Record<never, never>>>,
+		} = {},
+	): Promise<Response> {
 		if (!evt.route.id) {
 			throw error(500, "No Route");
 		}
@@ -99,9 +109,9 @@ export class API {
 			throw error(404, "Route not found");
 		}
 
-		const param = await this.parse_param(evt, module);
-		const query = await this.parse_query(evt, module);
-		const body = await this.parse_body(evt, module);
+		const param = await this.parse_param(evt, module, fallback.param);
+		const query = await this.parse_query(evt, module, fallback.query);
+		const body = await this.parse_body(evt, module, fallback.body);
 
 		const output = await module.default({ ...body, ...query, ...param }, evt);
 
@@ -119,13 +129,17 @@ export class API {
 
 	/**
 	 * Parse inputs from request event
-	 * @param id API route ID with method, e.g. `./user/[id]/GET`
+	 * @param module API route module, e.g. `import * as route from "./user/[id]/GET"`
 	 * @param evt Request event
+	 * @param extra Fallback inputs, ...
 	 * @returns Parsed inputs
 	 */
 	async parse<T extends APIRoute>(
 		module: T,
 		evt: RequestEvent,
+		extra: {
+			fallback?: Partial<Record<"body" | "query" | "param", Record<never, never>>>;
+		},
 	): Promise<
 		Simplify<
 			(T["Input"] extends z.ZodType ? z.infer<T["Input"]> : Record<never, never>) &
@@ -133,12 +147,35 @@ export class API {
 				(T["Param"] extends z.ZodType ? z.infer<T["Param"]> : Record<never, never>)
 		>
 	>;
-	async parse(id: string, evt: RequestEvent): Promise<{ [x: string]: unknown }>;
-	async parse(id: string | APIRoute, evt: RequestEvent): Promise<{ [x: string]: unknown }> {
+	/**
+	 * Parse inputs from request event
+	 * @param id API route ID with method, e.g. `./user/[id]/GET`
+	 * @param evt Request event
+	 * @param extra Fallback inputs, ...
+	 * @returns Parsed inputs
+	 */
+	async parse(
+		id: string,
+		evt: RequestEvent,
+		extra: {
+			fallback?: Partial<Record<"body" | "query" | "param", Record<never, never>>>;
+		},
+	): Promise<{ [x: string]: unknown }>;
+	async parse(
+		id: string | APIRoute,
+		evt: RequestEvent,
+		{
+			fallback = {
+				body: {},
+				query: {},
+				param: {},
+			} as Partial<Record<"body" | "query" | "param", Record<never, never>>>,
+		} = {},
+	): Promise<{ [x: string]: unknown }> {
 		const module = typeof id === "string" ? await this.parse_module(id) : id;
-		const param = await this.parse_param(evt, module);
-		const query = await this.parse_query(evt, module);
-		const body = await this.parse_body(evt, module);
+		const param = await this.parse_param(evt, module, fallback.param);
+		const query = await this.parse_query(evt, module, fallback.query);
+		const body = await this.parse_body(evt, module, fallback.body);
 		return { ...body, ...query, ...param };
 	}
 
@@ -248,8 +285,9 @@ export class API {
 	protected async parse_body(
 		evt: RequestEvent,
 		module: object,
+		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const body: Record<string, unknown> = {};
+		const body: Record<string, unknown> = { ...fallback };
 
 		// JSON body
 		if (evt.request.headers.get("content-type")?.startsWith("application/json")) {
@@ -309,8 +347,9 @@ export class API {
 	protected async parse_query(
 		evt: RequestEvent,
 		module: object,
+		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const query: Record<string, unknown> = {};
+		const query: Record<string, unknown> = { ...fallback };
 
 		for (const [key, value] of evt.url.searchParams.entries()) {
 			if (query[key]) {
@@ -340,8 +379,9 @@ export class API {
 	protected async parse_param(
 		evt: RequestEvent,
 		module: object,
+		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const param = evt.params;
+		const param = { ...fallback, ...evt.params };
 
 		log("param: %O", param);
 
