@@ -1,5 +1,6 @@
 import type { Simplify } from "type-fest";
 import { fromZodError } from "zod-validation-error";
+import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import type { OpenAPIObjectConfig } from "@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator.js";
 import { error, json } from "@sveltejs/kit";
 import type { HttpError } from "@sveltejs/kit";
@@ -29,11 +30,13 @@ export class API {
 	public routes: Record<string, () => Promise<unknown>>;
 	public config: OpenAPIObjectConfig;
 	public base: string;
+	public register: (registry: OpenAPIRegistry) => void;
 
 	constructor(
 		routes: Record<string, () => Promise<unknown>>,
 		config: OpenAPIObjectConfig,
 		base = "/api",
+		register: (registry: OpenAPIRegistry) => void = () => undefined,
 	) {
 		this.routes = Object.fromEntries(
 			Object.entries(routes)
@@ -55,6 +58,8 @@ export class API {
 		log("config: %O", this.config);
 		this.base = base;
 		log("base: %s", this.base);
+
+		this.register = register;
 	}
 
 	async handle(evt: RequestEvent, { cors = true } = {}): Promise<Response> {
@@ -152,7 +157,7 @@ export class API {
 		// using normal import for @asteasolutions/zod-to-openapi causes some problem to generate d.ts
 		const _m = "@asteasolutions/zod-to-openapi";
 		const m = await import(/* @vite-ignore */ _m);
-		const registry = new m.OpenAPIRegistry();
+		const registry: OpenAPIRegistry = new m.OpenAPIRegistry();
 
 		for (const route of Object.keys(this.routes)) {
 			const module = await this.parse_module(route);
@@ -201,14 +206,9 @@ export class API {
 										"Invalid input (path parameters, query string, or body)",
 									content: {
 										"application/json": {
-											schema: {
-												type: "object",
-												properties: {
-													message: {
-														type: "string",
-													},
-												},
-											},
+											schema: z.object({
+												message: z.string(),
+											}),
 										},
 									},
 								},
@@ -225,6 +225,8 @@ export class API {
 				},
 			});
 		}
+
+		this.register(registry);
 
 		const generator = new m.OpenApiGeneratorV3(registry.definitions);
 		const openapi = generator.generateDocument(
