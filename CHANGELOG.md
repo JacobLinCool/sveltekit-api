@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.11
+
+### Patch Changes
+
+-   [`d52fac2`](https://github.com/JacobLinCool/sveltekit-api/commit/d52fac22864dbcef5d1d7c17ad7a0d8be96e4a66) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Support route config modifier
+
 ## 0.2.10
 
 ### Patch Changes
