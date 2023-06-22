@@ -3,3 +3,4 @@ export * from "./tree.js";
 export * from "./log.js";
 export * from "./zod.js";
 export * from "./api.js";
+export * from "./openapi.js";

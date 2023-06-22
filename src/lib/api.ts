@@ -5,7 +5,7 @@ import { error, json } from "@sveltejs/kit";
 import type { HttpError } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
 import { log as _log } from "./log.js";
-import { OpenAPIRegistry, OpenApiGeneratorV3 } from "./openapi.js";
+import { OpenAPIRegistry, OpenApiGeneratorV3, type RouteConfig } from "./openapi.js";
 import { z } from "./zod.js";
 
 const log = _log.extend("api");
@@ -24,6 +24,10 @@ export interface APIRoute<
 	Input?: I;
 	Output?: O;
 	Error?: E;
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	Modifier?: Function;
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	default?: Function;
 }
 
 export class API {
@@ -202,7 +206,7 @@ export class API {
 		for (const route of Object.keys(this.routes)) {
 			const module = await this.parse_module(route);
 
-			registry.registerPath({
+			const config = module.modifier({
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				method: module.method.toLowerCase() as any,
 				path: module.path,
@@ -264,6 +268,8 @@ export class API {
 					) ?? {}),
 				},
 			});
+
+			registry.registerPath(config);
 		}
 
 		this.register(registry);
@@ -410,6 +416,7 @@ export class API {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		output?: z.ZodObject<any>;
 		errors: HttpError[];
+		modifier: (r: RouteConfig) => RouteConfig;
 	}> {
 		const handler = this.routes[id];
 		const parts = id.split("/");
@@ -437,6 +444,10 @@ export class API {
 			"Error" in module && module.Error && typeof module.Error === "object"
 				? Object.values(module.Error)
 				: [];
+		const modifier =
+			"Modifier" in module && typeof module.Modifier === "function"
+				? (module.Modifier as (r: RouteConfig) => RouteConfig)
+				: (r: RouteConfig) => r;
 
 		return {
 			path,
@@ -446,6 +457,7 @@ export class API {
 			param,
 			output,
 			errors,
+			modifier,
 		};
 	}
 }
