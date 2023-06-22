@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.10
+
+### Patch Changes
+
+-   [`0028a88`](https://github.com/JacobLinCool/sveltekit-api/commit/0028a88d03fe335e4feec6d46369d82541ffcbc8) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Set allow headers for cors
+
 ## 0.2.9
 
 ### Patch Changes
