@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.12
+
+### Patch Changes
+
+-   [`cc023a2`](https://github.com/JacobLinCool/sveltekit-api/commit/cc023a220caded1efff1fcee6b54f2240951d769) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Enable output verification by default
+
 ## 0.2.11
 
 ### Patch Changes
