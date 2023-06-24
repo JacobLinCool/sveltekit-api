@@ -1,7 +1,7 @@
 {
 	"name": "sveltekit-api",
 	"version": "0.2.11",
-	"description": "Utilities to create API endpoints in SvelteKit.",
+	"description": "Handles all kinds of SvelteKit data flows in one place, and automatically generate OpenAPI documentation.",
 	"license": "MIT",
 	"repository": {
 		"type": "git",

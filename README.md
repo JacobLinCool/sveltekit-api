@@ -1,8 +1,6 @@
 # SvelteKit-API
 
-Utilities to create API endpoints in SvelteKit.
-
-Mapping UI-first SvelteKit routes to API endpoints is a common task. This package provides utilities to make this easier.
+Handles all kinds of SvelteKit data flows in one place, and automatically generate OpenAPI documentation.
 
 ## Features
 
@@ -15,6 +13,14 @@ Mapping UI-first SvelteKit routes to API endpoints is a common task. This packag
 ```bash
 pnpm i -D sveltekit-api
 ```
+
+## Projects using SvelteKit-API
+
+These projects are using SvelteKit-API and can be used as examples:
+
+- [WASM OJ Wonderland](https://github.com/wasm-oj/wonderland): A SvelteKit-based online judge system core.
+- [PEA](https://github.com/JacobLinCool/pea): A serverless email authentication and verification service.
+- Add your project here by submitting a pull request!
 
 ## Usage
 
