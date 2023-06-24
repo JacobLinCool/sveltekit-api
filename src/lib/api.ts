@@ -5,12 +5,31 @@ import { error, json } from "@sveltejs/kit";
 import type { HttpError } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
 import { log as _log } from "./log.js";
-import { OpenAPIRegistry, OpenApiGeneratorV3, type RouteConfig } from "./openapi.js";
+import { OpenAPIRegistry, OpenApiGeneratorV3 } from "./openapi.js";
+import type { RouteConfig } from "./openapi.js";
 import { z } from "./zod.js";
 
 const log = _log.extend("api");
 
 export const METHOD = /^(GET|POST|PUT|DELETE|PATCH|OPTIONS)$/;
+
+/**
+ * Modify route config after parsing input-ouput shapes.
+ * Useful for adding custom tags, etc.
+ *
+ * @param r Route config
+ * @returns Modified route config
+ * @example
+ * ```ts
+ * export const Modifier: RouteModifier = (r) => {
+ *     r.tags = ["Tag"];
+ *     r.operationId = "customOperationId";
+ *     r.security = [{ bearerAuth: [] }];
+ *     return r;
+ * };
+ * ```
+ */
+export type RouteModifier = (r: RouteConfig) => RouteConfig;
 
 export interface APIRoute<
 	P extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
@@ -25,7 +44,7 @@ export interface APIRoute<
 	Output?: O;
 	Error?: E;
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	Modifier?: Function;
+	Modifier?: RouteModifier;
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	default?: Function;
 }
@@ -416,7 +435,7 @@ export class API {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		output?: z.ZodObject<any>;
 		errors: HttpError[];
-		modifier: (r: RouteConfig) => RouteConfig;
+		modifier: RouteModifier;
 	}> {
 		const handler = this.routes[id];
 		const parts = id.split("/");
@@ -446,7 +465,7 @@ export class API {
 				: [];
 		const modifier =
 			"Modifier" in module && typeof module.Modifier === "function"
-				? (module.Modifier as (r: RouteConfig) => RouteConfig)
+				? (module.Modifier as RouteModifier)
 				: (r: RouteConfig) => r;
 
 		return {
