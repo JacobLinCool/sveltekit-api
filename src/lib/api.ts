@@ -31,6 +31,21 @@ export const METHOD = /^(GET|POST|PUT|DELETE|PATCH|OPTIONS)$/;
  */
 export type RouteModifier = (r: RouteConfig) => RouteConfig;
 
+export interface HandleOptions {
+	/**
+	 * Enable CORS headers
+	 */
+	cors: boolean;
+	/**
+	 * Fallback values for missing input shapes, will be validated against
+	 */
+	fallback: Partial<Record<"body" | "query" | "param", Record<never, never>>>;
+	/**
+	 * Verify and strip unknown properties from output, useful for preventing accidental exposure of sensitive data
+	 */
+	verify: boolean;
+}
+
 export interface APIRoute<
 	P extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	Q extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
@@ -93,8 +108,9 @@ export class API {
 				body: {},
 				query: {},
 				param: {},
-			} as Partial<Record<"body" | "query" | "param", Record<never, never>>>,
-		} = {},
+			},
+			verify = true,
+		}: Partial<HandleOptions> = {},
 	): Promise<Response> {
 		if (!evt.route.id) {
 			throw error(500, "No Route");
@@ -139,7 +155,7 @@ export class API {
 
 		const output = await module.default({ ...body, ...query, ...param }, evt);
 
-		const res = json(output, {
+		const res = json(verify ? await this.parse_output(output, module) : output, {
 			headers: cors
 				? {
 						"Access-Control-Allow-Origin": "*",
@@ -421,6 +437,29 @@ export class API {
 		}
 
 		return param;
+	}
+
+	protected async parse_output(
+		out: unknown,
+		module: object,
+		fallback?: Record<never, never>,
+	): Promise<Record<string, unknown>> {
+		const output: Record<string, unknown> = { ...fallback };
+
+		const validator =
+			"Output" in module && module.Output instanceof z.ZodObject
+				? module.Output
+				: z.object({});
+		const validation = validator.safeParse(out);
+		if (!validation.success) {
+			log.extend("error")("output: %O failed validation: %O", out, validation.error);
+			throw error(
+				500,
+				"Output validation failed. Please report this error to the developer.",
+			);
+		}
+
+		return output;
 	}
 
 	protected async parse_module(id: string): Promise<{
