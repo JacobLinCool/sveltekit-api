@@ -444,15 +444,18 @@ export class API {
 		module: object,
 		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const output: Record<string, unknown> = { ...fallback };
+		const output: Record<string, unknown> = {
+			...fallback,
+			...(typeof out === "object" ? out : undefined),
+		};
 
 		const validator =
 			"Output" in module && module.Output instanceof z.ZodObject
 				? module.Output
 				: z.object({});
-		const validation = validator.safeParse(out);
+		const validation = validator.safeParse(output);
 		if (!validation.success) {
-			log.extend("error")("output: %O failed validation: %O", out, validation.error);
+			log.extend("error")("output: %O failed validation: %O", output, validation.error);
 			throw error(
 				500,
 				"Output validation failed. Please report this error to the developer.",
