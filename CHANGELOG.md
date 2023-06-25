@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.2.13
+
+### Patch Changes
+
+-   [`d71814a`](https://github.com/JacobLinCool/sveltekit-api/commit/d71814a4ef43ace2a1387fd638c83fb4054e4118) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix output parser
+
 ## 0.2.12
 
 ### Patch Changes
