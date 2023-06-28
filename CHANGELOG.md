@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.3.0
+
+### Minor Changes
+
+-   [`e3458bb`](https://github.com/JacobLinCool/sveltekit-api/commit/e3458bb1ebb80dd23178a4fb79959007fe18546e) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Support event stream and custom response as handler output
+
 ## 0.2.13
 
 ### Patch Changes
