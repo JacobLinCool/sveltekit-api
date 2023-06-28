@@ -51,15 +51,41 @@ export interface APIRoute<
 	Q extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	I extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	O extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	S extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	E extends Partial<{ [x: string]: HttpError }> = Partial<{ [x: string]: HttpError }>,
 > {
+	/**
+	 * Path parameters
+	 */
 	Param?: P;
+	/**
+	 * Query string parameters
+	 */
 	Query?: Q;
+	/**
+	 * Body
+	 */
 	Input?: I;
+	/**
+	 * Returning data
+	 */
 	Output?: O;
+	/**
+	 * Event stream data
+	 */
+	Stream?: S;
+	/**
+	 * Possible errors
+	 */
 	Error?: E;
+	/**
+	 * OpenAPI route config modifier
+	 */
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	Modifier?: RouteModifier;
+	/**
+	 * Handler
+	 */
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	default?: Function;
 }
@@ -155,14 +181,37 @@ export class API {
 
 		const output = await module.default({ ...body, ...query, ...param }, evt);
 
+		const CORS = {
+			"Access-Control-Allow-Origin": "*",
+			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+			"Access-Control-Allow-Headers": "Content-Type, Authorization",
+		} as const;
+
+		if (output instanceof Response) {
+			if (cors) {
+				for (const [key, value] of Object.entries(CORS)) {
+					output.headers.set(key, value);
+				}
+			}
+
+			return output;
+		}
+
+		// ReadableStream for Server-Sent Events
+		if (output instanceof ReadableStream) {
+			const res = new Response(output, {
+				headers: {
+					"Content-Type": "text/event-stream",
+					"Cache-Control": "no-cache",
+					Connection: "keep-alive",
+					...(cors ? CORS : {}),
+				},
+			});
+			return res;
+		}
+
 		const res = json(verify ? await this.parse_output(output, module) : output, {
-			headers: cors
-				? {
-						"Access-Control-Allow-Origin": "*",
-						"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-						"Access-Control-Allow-Headers": "Content-Type, Authorization",
-				  }
-				: {},
+			headers: cors ? CORS : {},
 		});
 
 		return res;
@@ -273,6 +322,18 @@ export class API {
 									content: {
 										"application/json": {
 											schema: module.output as never,
+										},
+									},
+								},
+						  }
+						: undefined),
+					...(module.stream
+						? {
+								"200": {
+									description: "",
+									content: {
+										"text/event-stream": {
+											schema: module.stream as never,
 										},
 									},
 								},
@@ -476,6 +537,8 @@ export class API {
 		param: z.ZodObject<any>;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		output?: z.ZodObject<any>;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		stream?: z.ZodObject<any>;
 		errors: HttpError[];
 		modifier: RouteModifier;
 	}> {
@@ -501,6 +564,8 @@ export class API {
 			"Param" in module && module.Param instanceof z.ZodObject ? module.Param : z.object({});
 		const output =
 			"Output" in module && module.Output instanceof z.ZodObject ? module.Output : undefined;
+		const stream =
+			"Stream" in module && module.Stream instanceof z.ZodObject ? module.Stream : undefined;
 		const errors =
 			"Error" in module && module.Error && typeof module.Error === "object"
 				? Object.values(module.Error)
@@ -517,6 +582,7 @@ export class API {
 			query,
 			param,
 			output,
+			stream,
 			errors,
 			modifier,
 		};
