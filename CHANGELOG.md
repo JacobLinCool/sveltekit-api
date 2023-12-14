@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.3.1
+
+### Patch Changes
+
+-   [`f22bb75`](https://github.com/JacobLinCool/sveltekit-api/commit/f22bb7578ce1bc22490a655462780d3d0b773fd9) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Support promised (async) output
+
 ## 0.3.0
 
 ### Minor Changes
