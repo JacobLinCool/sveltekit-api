@@ -1,6 +1,7 @@
 import type { RequestEvent, ServerLoadEvent } from "@sveltejs/kit";
 import { json } from "@sveltejs/kit";
 import { log as _log } from "./log.js";
+import { recursive_await } from "./utils.js";
 
 const log = _log.extend("load2api");
 
@@ -35,24 +36,4 @@ export async function load2api<Evt extends RequestEvent, RouteID extends string 
 	const data = await load(loader as never);
 
 	return json(await recursive_await(data));
-}
-
-function recursive_await(obj: unknown): unknown {
-	if (obj instanceof Promise) {
-		return obj.then(recursive_await);
-	} else if (obj instanceof Array) {
-		return Promise.all(obj.map(recursive_await));
-	} else if (obj instanceof Object) {
-		const keys = Object.keys(obj);
-		const values = Object.values(obj);
-		return Promise.all(values.map(recursive_await)).then((values) => {
-			const returns: Record<string, unknown> = {};
-			for (let i = 0; i < keys.length; i++) {
-				returns[keys[i]] = values[i];
-			}
-			return returns;
-		});
-	} else {
-		return obj;
-	}
 }

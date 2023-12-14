@@ -7,6 +7,7 @@ import type { RequestEvent } from "@sveltejs/kit";
 import { log as _log } from "./log.js";
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from "./openapi.js";
 import type { RouteConfig } from "./openapi.js";
+import { recursive_await } from "./utils.js";
 import { z } from "./zod.js";
 
 const log = _log.extend("api");
@@ -210,11 +211,26 @@ export class API {
 			return res;
 		}
 
-		const res = json(verify ? await this.parse_output(output, module) : output, {
-			headers: cors ? CORS : {},
-		});
+		if (output instanceof Response) {
+			return output;
+		} else if (output instanceof ArrayBuffer) {
+			const res = new Response(output, {
+				headers: {
+					"Content-Type": "application/octet-stream",
+					...(cors ? CORS : {}),
+				},
+			});
+			return res;
+		} else {
+			const out = await recursive_await(
+				verify ? await this.parse_output(output, module) : output,
+			);
+			const res = json(out, {
+				headers: cors ? CORS : {},
+			});
 
-		return res;
+			return res;
+		}
 	}
 
 	/**
@@ -514,7 +530,7 @@ export class API {
 			"Output" in module && module.Output instanceof z.ZodObject
 				? module.Output
 				: z.object({});
-		const validation = validator.safeParse(output);
+		const validation = await validator.spa(output);
 		if (!validation.success) {
 			log.extend("error")("output: %O failed validation: %O", output, validation.error);
 			throw error(
