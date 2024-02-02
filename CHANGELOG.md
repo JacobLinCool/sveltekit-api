@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.4.0
+
+### Minor Changes
+
+- [#34](https://github.com/JacobLinCool/sveltekit-api/pull/34) [`399a8daa0890a0dae2653cfe97c6ee9e6f61979c`](https://github.com/JacobLinCool/sveltekit-api/commit/399a8daa0890a0dae2653cfe97c6ee9e6f61979c) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - `Endpoint` class for better type inference
+
 ## 0.3.2
 
 ### Patch Changes
