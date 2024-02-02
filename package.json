@@ -36,7 +36,7 @@
 	"devDependencies": {
 		"@changesets/changelog-github": "^0.4.8",
 		"@changesets/cli": "^2.27.1",
-		"@sveltejs/adapter-auto": "^2.1.1",
+		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/package": "^2.2.6",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"@types/better-sqlite3": "^7.6.9",
