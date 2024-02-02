@@ -1,10 +1,10 @@
-import { z } from "$lib/index.js";
+import { Endpoint, z } from "$lib/index.js";
 
 export const Output = z.object({
 	data: z.promise(z.number()).openapi({ type: "number" }),
 });
 
-export default async function () {
+export default new Endpoint({ Output }).handle(async () => {
 	return {
 		data: new Promise((resolve) => {
 			setTimeout(() => {
@@ -12,4 +12,4 @@ export default async function () {
 			}, 1000);
 		}),
 	};
-}
+});

@@ -10,6 +10,12 @@ export const Param = z.object({
 	id: z.string(),
 });
 
+export const Input = z.object({
+	title: z.string(),
+	content: z.string(),
+	author: z.string(),
+});
+
 export const Output = z.object({
 	id: z.string(),
 	title: z.string(),
@@ -23,7 +29,7 @@ export const Error = {
 	403: error(403, "Forbidden"),
 };
 
-export default new Endpoint({ Param, Query, Output, Error }).handle(async (param) => {
+export default new Endpoint({ Param, Query, Input, Output, Error }).handle(async (param) => {
 	const post = posts.get(param.id);
 
 	if (!post) {
@@ -33,6 +39,10 @@ export default new Endpoint({ Param, Query, Output, Error }).handle(async (param
 	if (post.password && post.password !== param.password) {
 		throw Error[403];
 	}
+
+	post.title = param.title;
+	post.content = param.content;
+	post.author = param.author;
 
 	return post;
 });

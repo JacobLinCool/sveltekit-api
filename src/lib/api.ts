@@ -52,7 +52,7 @@ export interface APIRoute<
 	I extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	O extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	S extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	E extends Partial<{ [x: string]: HttpError }> = Partial<{ [x: string]: HttpError }>,
+	E extends Record<string, HttpError> = Record<string, HttpError>,
 > {
 	/**
 	 * Path parameters
@@ -87,6 +87,55 @@ export interface APIRoute<
 	 * Handler
 	 */
 	// eslint-disable-next-line @typescript-eslint/ban-types
+	default?: Function;
+}
+
+export class Endpoint<
+	P extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	Q extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	I extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	O extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	S extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	E extends Record<string, HttpError> = Record<string, HttpError>,
+> implements APIRoute<P, Q, I, O, S, E>
+{
+	constructor(
+		{
+			Param,
+			Query,
+			Input,
+			Output,
+			Stream,
+			Error,
+			Modifier,
+		}: APIRoute<P, Q, I, O, S, E> = {} as APIRoute<P, Q, I, O, S, E>,
+	) {
+		this.Param = Param;
+		this.Query = Query;
+		this.Input = Input;
+		this.Output = Output;
+		this.Stream = Stream;
+		this.Error = Error;
+		this.Modifier = Modifier;
+	}
+
+	handle(
+		f: (
+			input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
+			evt: RequestEvent,
+		) => Promise<z.infer<O>>,
+	): this {
+		this.default = f;
+		return this;
+	}
+
+	Param?: P;
+	Query?: Q;
+	Input?: I;
+	Output?: O;
+	Stream?: S;
+	Error?: E;
+	Modifier?: RouteModifier;
 	default?: Function;
 }
 
@@ -165,19 +214,25 @@ export class API {
 			throw error(404, "Route not found");
 		}
 
-		const module = await route();
-		if (
-			!module ||
-			typeof module !== "object" ||
-			!("default" in module) ||
-			typeof module.default !== "function"
-		) {
+		let module = (await route()) as APIRoute;
+		if (!module || typeof module !== "object" || !("default" in module)) {
 			throw error(404, "Route not found");
+		}
+		if (module.default instanceof Endpoint) {
+			module = module.default;
+		} else if (typeof module.default === "function") {
+			// whole module is an endpoint
+		} else {
+			throw error(404, "Route type not supported");
 		}
 
 		const param = await this.parse_param(evt, module, fallback.param);
 		const query = await this.parse_query(evt, module, fallback.query);
 		const body = await this.parse_body(evt, module, fallback.body);
+
+		if (!module.default) {
+			throw error(500, "Route handler not defined");
+		}
 
 		const output = await module.default({ ...body, ...query, ...param }, evt);
 
@@ -566,8 +621,16 @@ export class API {
 			.replace(/\[(?:\.{3})?(.+)\]/g, "{$1}");
 		const method = parts[parts.length - 1].toUpperCase();
 
-		const module = await handler();
+		let module = (await handler()) as APIRoute;
 		if (!module || typeof module !== "object") {
+			throw new Error(`Route ${id} is not a module`);
+		}
+
+		if (module.default instanceof Endpoint) {
+			module = module.default;
+		} else if (typeof module.default === "function") {
+			// whole module is an endpoint
+		} else {
 			throw new Error(`Route ${id} is not a module`);
 		}
 

@@ -42,6 +42,24 @@ const config = {
 Create the API endpoints in the structure like [`src/api`](./src/api).
 
 ```ts
+// for example:
+src
+├── api
+│   ├── index.ts
+│   └── post
+│       ├── GET.ts
+│       ├── POST.ts
+│       ├── [...id]
+│       │   └── GET.ts
+│       └── search
+│           └── GET.ts
+├── lib
+│   └── ...
+└── routes
+    └── ...
+```
+
+```ts
 // file: src/api/index.ts
 import { API } from "sveltekit-api";
 
@@ -56,9 +74,18 @@ export default new API(import.meta.glob("./**/*.ts"), {
 ```
 
 ```ts
-// file: src/api/post/POST.ts
-import { z } from "sveltekit-api";
-import { posts, type Post } from "db";
+// file: src/api/post/[...id]/PUT.ts
+import { Endpoint, z } from "$lib/index.js";
+import { error } from "@sveltejs/kit";
+import { posts, type Post } from "../../db.js";
+
+export const Query = z.object({
+    password: z.string().optional(),
+});
+
+export const Param = z.object({
+    id: z.string(),
+});
 
 export const Input = z.object({
     title: z.string(),
@@ -74,15 +101,28 @@ export const Output = z.object({
     date: z.string(),
 }) satisfies z.ZodSchema<Post>;
 
-export default async function (input: z.infer<typeof Input>): Promise<z.infer<typeof Output>> {
-    const id = Math.random().toString(36).substring(2);
-    const date = new Date().toISOString();
-    const post = { id, date, ...input };
+export const Error = {
+    404: error(404, "Post not found"),
+    403: error(403, "Forbidden"),
+};
 
-    posts.set(id, post);
+export default new Endpoint({ Param, Query, Input, Output, Error }).handle(async (param) => {
+    const post = posts.get(param.id);
+
+    if (!post) {
+        throw Error[404];
+    }
+
+    if (post.password && post.password !== param.password) {
+        throw Error[403];
+    }
+
+    post.title = param.title;
+    post.content = param.content;
+    post.author = param.author;
 
     return post;
-}
+});
 ```
 
 Call the API handler and OpenAPI generator in your routes like [`src/routes/api`](./src/routes/api).
