@@ -1,12 +1,11 @@
+import type { OpenAPIObjectConfig } from "@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator.js";
+import type { HttpError, RequestEvent } from "@sveltejs/kit";
+import { error, json } from "@sveltejs/kit";
 import type { Simplify } from "type-fest";
 import { fromZodError } from "zod-validation-error";
-import type { OpenAPIObjectConfig } from "@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator.js";
-import { error, json } from "@sveltejs/kit";
-import type { HttpError } from "@sveltejs/kit";
-import type { RequestEvent } from "@sveltejs/kit";
 import { log as _log } from "./log.js";
-import { OpenAPIRegistry, OpenApiGeneratorV3 } from "./openapi.js";
 import type { RouteConfig } from "./openapi.js";
+import { OpenAPIRegistry, OpenApiGeneratorV3 } from "./openapi.js";
 import { recursive_await } from "./utils.js";
 import { z } from "./zod.js";
 
@@ -153,7 +152,7 @@ export class API {
 							"Access-Control-Allow-Methods":
 								"GET, POST, PUT, DELETE, PATCH, OPTIONS",
 							"Access-Control-Allow-Headers": "Content-Type, Authorization",
-					  }
+						}
 					: {},
 			});
 		}
@@ -327,7 +326,7 @@ export class API {
 										schema: module.body,
 									},
 								},
-						  }
+							}
 						: undefined,
 				},
 				responses: {
@@ -341,7 +340,7 @@ export class API {
 										},
 									},
 								},
-						  }
+							}
 						: undefined),
 					...(module.stream
 						? {
@@ -353,7 +352,7 @@ export class API {
 										},
 									},
 								},
-						  }
+							}
 						: undefined),
 					...(module.query || module.param || module.body
 						? {
@@ -368,7 +367,7 @@ export class API {
 										},
 									},
 								},
-						  }
+							}
 						: undefined),
 					...(Object.fromEntries(
 						module.errors.map((error) => [
@@ -396,7 +395,7 @@ export class API {
 							},
 						],
 						...this.config,
-				  }
+					}
 				: this.config,
 		);
 		log("openapi: %O", openapi);

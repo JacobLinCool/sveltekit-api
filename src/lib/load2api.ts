@@ -28,7 +28,7 @@ export async function load2api<Evt extends RequestEvent, RouteID extends string 
 		...evt,
 		route: { id },
 		depends: () => undefined,
-		parent: async () => ({} as never),
+		parent: async () => ({}) as never,
 	};
 
 	log(evt.route.id, "=>", id);

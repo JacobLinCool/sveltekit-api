@@ -4,9 +4,9 @@ Handles all kinds of SvelteKit data flows in one place, and automatically genera
 
 ## Features
 
-- [x] `API`: Manage API endpoints and automatically generate OpenAPI documentation
-- [x] `load2api`: Transform a server-side `load` function into an API endpoint
-- [x] `tree`: Build a tree of endpoint routes
+-   [x] `API`: Manage API endpoints and automatically generate OpenAPI documentation
+-   [x] `load2api`: Transform a server-side `load` function into an API endpoint
+-   [x] `tree`: Build a tree of endpoint routes
 
 ## Installation
 
@@ -18,9 +18,9 @@ pnpm i -D sveltekit-api
 
 These projects are using SvelteKit-API and can be used as examples:
 
-- [WASM OJ Wonderland](https://github.com/wasm-oj/wonderland): A SvelteKit-based online judge system core.
-- [PEA](https://github.com/JacobLinCool/pea): A serverless email authentication and verification service.
-- Add your project here by submitting a pull request!
+-   [WASM OJ Wonderland](https://github.com/wasm-oj/wonderland): A SvelteKit-based online judge system core.
+-   [PEA](https://github.com/JacobLinCool/pea): A serverless email authentication and verification service.
+-   Add your project here by submitting a pull request!
 
 ## Usage
 
@@ -129,6 +129,6 @@ import { json } from "@sveltejs/kit";
 export const prerender = true;
 
 export const GET = async () => {
-    return json(await tree(import.meta.glob(".\/**\/*\/+server.ts")));
+    return json(await tree(import.meta.glob("./**/*/+server.ts")));
 };
 ```
