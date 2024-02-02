@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.4.1
+
+### Patch Changes
+
+- [`7c667f50f24ba8f1cc4914c5d9a7ccea3dd0d7bc`](https://github.com/JacobLinCool/sveltekit-api/commit/7c667f50f24ba8f1cc4914c5d9a7ccea3dd0d7bc) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Add `error` util function to prevent directly throwing from SvelteKit 2
+
 ## 0.4.0
 
 ### Minor Changes
