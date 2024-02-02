@@ -1,5 +1,4 @@
-import { Endpoint, z } from "$lib/index.js";
-import { error } from "@sveltejs/kit";
+import { Endpoint, error, z } from "$lib/index.js";
 import { posts, type Post } from "../../db.js";
 
 export const Query = z.object({

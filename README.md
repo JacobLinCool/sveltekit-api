@@ -75,8 +75,7 @@ export default new API(import.meta.glob("./**/*.ts"), {
 
 ```ts
 // file: src/api/post/[...id]/PUT.ts
-import { Endpoint, z } from "sveltekit-api";
-import { error } from "@sveltejs/kit";
+import { Endpoint, z, error } from "sveltekit-api";
 import { posts, type Post } from "../../db.js";
 
 export const Query = z.object({
