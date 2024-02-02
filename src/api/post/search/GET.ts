@@ -1,4 +1,4 @@
-import { z } from "$lib/index.js";
+import { Endpoint, z } from "$lib/index.js";
 import { posts, type Post } from "../../db.js";
 
 export const Query = z.object({
@@ -17,7 +17,7 @@ export const Output = z.object({
 	),
 }) satisfies z.ZodSchema<{ posts: Post[] }>;
 
-export default async function (query: z.infer<typeof Query>): Promise<z.infer<typeof Output>> {
+export default new Endpoint({ Query, Output }).handle(async (query) => {
 	const q = query.q.toLowerCase();
 
 	const results = [...posts.values()].filter(
@@ -29,4 +29,4 @@ export default async function (query: z.infer<typeof Query>): Promise<z.infer<ty
 	);
 
 	return { posts: results };
-}
+});

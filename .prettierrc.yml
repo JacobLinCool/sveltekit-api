@@ -10,6 +10,7 @@ overrides:
     - files: "*.md"
       options:
           useTabs: false
+          tabWidth: 2
     - files: "*.svelte"
       options:
           parser: svelte

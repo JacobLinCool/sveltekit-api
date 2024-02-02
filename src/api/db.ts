@@ -4,6 +4,7 @@ export interface Post {
 	content: string;
 	author: string;
 	date: string;
+	password?: string;
 }
 
 export const posts = new Map<string, Post>();
