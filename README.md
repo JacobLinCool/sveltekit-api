@@ -4,9 +4,9 @@ Handles all kinds of SvelteKit data flows in one place, and automatically genera
 
 ## Features
 
--   [x] `API`: Manage API endpoints and automatically generate OpenAPI documentation
--   [x] `load2api`: Transform a server-side `load` function into an API endpoint
--   [x] `tree`: Build a tree of endpoint routes
+- [x] `API`: Manage API endpoints and automatically generate OpenAPI documentation
+- [x] `load2api`: Transform a server-side `load` function into an API endpoint
+- [x] `tree`: Build a tree of endpoint routes
 
 ## Installation
 
@@ -18,9 +18,9 @@ pnpm i -D sveltekit-api
 
 These projects are using SvelteKit-API and can be used as examples:
 
--   [WASM OJ Wonderland](https://github.com/wasm-oj/wonderland): A SvelteKit-based online judge system core.
--   [PEA](https://github.com/JacobLinCool/pea): A serverless email authentication and verification service.
--   Add your project here by submitting a pull request!
+- [WASM OJ Wonderland](https://github.com/wasm-oj/wonderland): A SvelteKit-based online judge system core.
+- [PEA](https://github.com/JacobLinCool/pea): A serverless email authentication and verification service.
+- Add your project here by submitting a pull request!
 
 ## Usage
 
@@ -31,11 +31,11 @@ Add `$api` to your `svelte.config.js`:
 ```js
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-    kit: {
-        alias: {
-            "$api/*": "./src/api/*",
-        },
+  kit: {
+    alias: {
+      "$api/*": "./src/api/*",
     },
+  },
 };
 ```
 
@@ -64,12 +64,12 @@ src
 import { API } from "sveltekit-api";
 
 export default new API(import.meta.glob("./**/*.ts"), {
-    openapi: "3.0.0",
-    info: {
-        title: "Simple Post API",
-        version: "1.0.0",
-        description: "An example API",
-    },
+  openapi: "3.0.0",
+  info: {
+    title: "Simple Post API",
+    version: "1.0.0",
+    description: "An example API",
+  },
 });
 ```
 
@@ -80,48 +80,48 @@ import { error } from "@sveltejs/kit";
 import { posts, type Post } from "../../db.js";
 
 export const Query = z.object({
-    password: z.string().optional(),
+  password: z.string().optional(),
 });
 
 export const Param = z.object({
-    id: z.string(),
+  id: z.string(),
 });
 
 export const Input = z.object({
-    title: z.string(),
-    content: z.string(),
-    author: z.string(),
+  title: z.string(),
+  content: z.string(),
+  author: z.string(),
 });
 
 export const Output = z.object({
-    id: z.string(),
-    title: z.string(),
-    content: z.string(),
-    author: z.string(),
-    date: z.string(),
+  id: z.string(),
+  title: z.string(),
+  content: z.string(),
+  author: z.string(),
+  date: z.string(),
 }) satisfies z.ZodSchema<Post>;
 
 export const Error = {
-    404: error(404, "Post not found"),
-    403: error(403, "Forbidden"),
+  404: error(404, "Post not found"),
+  403: error(403, "Forbidden"),
 };
 
 export default new Endpoint({ Param, Query, Input, Output, Error }).handle(async (param) => {
-    const post = posts.get(param.id);
+  const post = posts.get(param.id);
 
-    if (!post) {
-        throw Error[404];
-    }
+  if (!post) {
+    throw Error[404];
+  }
 
-    if (post.password && post.password !== param.password) {
-        throw Error[403];
-    }
+  if (post.password && post.password !== param.password) {
+    throw Error[403];
+  }
 
-    post.title = param.title;
-    post.content = param.content;
-    post.author = param.author;
+  post.title = param.title;
+  post.content = param.content;
+  post.author = param.author;
 
-    return post;
+  return post;
 });
 ```
 
@@ -169,6 +169,6 @@ import { json } from "@sveltejs/kit";
 export const prerender = true;
 
 export const GET = async () => {
-    return json(await tree(import.meta.glob("./**/*/+server.ts")));
+  return json(await tree(import.meta.glob("./**/*/+server.ts")));
 };
 ```
