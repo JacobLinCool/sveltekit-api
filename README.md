@@ -33,7 +33,7 @@ Add `$api` to your `svelte.config.js`:
 const config = {
   kit: {
     alias: {
-      "$api/*": "./src/api/*",
+      "$api": "./src/api",
     },
   },
 };
@@ -75,7 +75,7 @@ export default new API(import.meta.glob("./**/*.ts"), {
 
 ```ts
 // file: src/api/post/[...id]/PUT.ts
-import { Endpoint, z } from "$lib/index.js";
+import { Endpoint, z } from "sveltekit-api";
 import { error } from "@sveltejs/kit";
 import { posts, type Post } from "../../db.js";
 
