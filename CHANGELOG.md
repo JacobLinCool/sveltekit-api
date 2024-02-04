@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.4.4
+
+### Patch Changes
+
+- [`bb339ad90cfc3d33cf6e5522411c31b975382940`](https://github.com/JacobLinCool/sveltekit-api/commit/bb339ad90cfc3d33cf6e5522411c31b975382940) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix miss typed char in 0.4.3
+
 ## 0.4.3
 
 ### Patch Changes
