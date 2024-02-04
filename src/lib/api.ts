@@ -471,7 +471,7 @@ export class API {
 
 		// GET, HEAD, DELETE, OPTIONS have no body
 		const method = evt.request.method.toUpperCase();
-		if (!["GET", "HEAD", "DELETE", "OPTIONS"].includes(method)) {
+		if (["GET", "HEAD", "DELETE", "OPTIONS"].includes(method)) {
 			return body;
 		}
 
