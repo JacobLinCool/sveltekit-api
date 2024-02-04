@@ -469,6 +469,12 @@ export class API {
 	): Promise<Record<string, unknown>> {
 		const body: Record<string, unknown> = { ...fallback };
 
+		// GET, HEAD, DELETE, OPTIONS have no body
+		const method = evt.request.method.toUpperCase();
+		if (!["GET", "HEAD", "DELETE", "OPTIONS"].includes(method)) {
+			return body;
+		}
+
 		// JSON body
 		if (evt.request.headers.get("content-type")?.startsWith("application/json")) {
 			try {
