@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.4.3
+
+### Patch Changes
+
+- [`bdf3acee5df8894ed41a5fed3a9da6fb6a8de011`](https://github.com/JacobLinCool/sveltekit-api/commit/bdf3acee5df8894ed41a5fed3a9da6fb6a8de011) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - GET, HEAD, DELETE, OPTIONS should not have body
+
 ## 0.4.2
 
 ### Patch Changes
