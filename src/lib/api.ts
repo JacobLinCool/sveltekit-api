@@ -97,6 +97,13 @@ export class Endpoint<
 	O extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	S extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
 	E extends Record<string, HttpError> = Record<string, HttpError>,
+	H extends (
+		input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
+		evt: RequestEvent,
+	) => Promise<z.infer<O>> = (
+		input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
+		evt: RequestEvent,
+	) => Promise<z.infer<O>>,
 > implements APIRoute<P, Q, I, O, S, E>
 {
 	constructor(
@@ -119,12 +126,7 @@ export class Endpoint<
 		this.Modifier = Modifier;
 	}
 
-	handle(
-		f: (
-			input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
-			evt: RequestEvent,
-		) => Promise<z.infer<O>>,
-	): this {
+	handle(f: H): this {
 		this.default = f;
 		return this;
 	}
@@ -136,7 +138,10 @@ export class Endpoint<
 	Stream?: S;
 	Error?: E;
 	Modifier?: RouteModifier;
-	default?: Function;
+	// @ts-expect-error default handler throws error
+	default: H = () => {
+		throw new Error("Route handler not defined");
+	};
 }
 
 export class API {
