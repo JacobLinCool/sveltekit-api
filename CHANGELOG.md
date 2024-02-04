@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.4.2
+
+### Patch Changes
+
+- [`bab81f0c3c7472fcee99b9bf39622c980db0abe5`](https://github.com/JacobLinCool/sveltekit-api/commit/bab81f0c3c7472fcee99b9bf39622c980db0abe5) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Improve endpoint handler type inference
+
 ## 0.4.1
 
 ### Patch Changes
