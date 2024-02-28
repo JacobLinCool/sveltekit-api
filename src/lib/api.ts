@@ -47,11 +47,11 @@ export interface HandleOptions {
 }
 
 export interface APIRoute<
-	P extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	Q extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	I extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	O extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	S extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	P extends z.ZodType = z.ZodObject<Record<never, never>>,
+	Q extends z.ZodType = z.ZodObject<Record<never, never>>,
+	I extends z.ZodType = z.ZodObject<Record<never, never>>,
+	O extends z.ZodType = z.ZodObject<Record<never, never>>,
+	S extends z.ZodType = z.ZodObject<Record<never, never>>,
 	E extends Record<string, HttpError> = Record<string, HttpError>,
 > {
 	/**
@@ -91,11 +91,11 @@ export interface APIRoute<
 }
 
 export class Endpoint<
-	P extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	Q extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	I extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	O extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
-	S extends z.ZodObject<Record<never, never>> = z.ZodObject<Record<never, never>>,
+	P extends z.ZodType = z.ZodObject<Record<never, never>>,
+	Q extends z.ZodType = z.ZodObject<Record<never, never>>,
+	I extends z.ZodType = z.ZodObject<Record<never, never>>,
+	O extends z.ZodType = z.ZodObject<Record<never, never>>,
+	S extends z.ZodType = z.ZodObject<Record<never, never>>,
 	E extends Record<string, HttpError> = Record<string, HttpError>,
 	H extends (
 		input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
@@ -646,15 +646,15 @@ export class API {
 		}
 
 		const body =
-			"Input" in module && module.Input instanceof z.ZodObject ? module.Input : undefined;
+			"Input" in module && module.Input instanceof z.ZodType ? module.Input : undefined;
 		const query =
-			"Query" in module && module.Query instanceof z.ZodObject ? module.Query : z.object({});
+			"Query" in module && module.Query instanceof z.ZodType ? module.Query : z.object({});
 		const param =
-			"Param" in module && module.Param instanceof z.ZodObject ? module.Param : z.object({});
+			"Param" in module && module.Param instanceof z.ZodType ? module.Param : z.object({});
 		const output =
-			"Output" in module && module.Output instanceof z.ZodObject ? module.Output : undefined;
+			"Output" in module && module.Output instanceof z.ZodType ? module.Output : undefined;
 		const stream =
-			"Stream" in module && module.Stream instanceof z.ZodObject ? module.Stream : undefined;
+			"Stream" in module && module.Stream instanceof z.ZodType ? module.Stream : undefined;
 		const errors =
 			"Error" in module && module.Error && typeof module.Error === "object"
 				? Object.values(module.Error)
