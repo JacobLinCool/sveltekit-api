@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.5.0
+
+### Minor Changes
+
+- [`abac82a02ed370f1b543ca42922006153ee68547`](https://github.com/JacobLinCool/sveltekit-api/commit/abac82a02ed370f1b543ca42922006153ee68547) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Support Zod Schemas that are not ZodObjects.
+
 ## 0.4.4
 
 ### Patch Changes
