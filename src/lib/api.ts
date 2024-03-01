@@ -586,15 +586,15 @@ export class API {
 		module: object,
 		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const output: Record<string, unknown> = {
-			...fallback,
-			...(typeof out === "object" ? out : undefined),
-		};
+		const output: Record<string, unknown> | unknown[] = Array.isArray(out)
+			? out
+			: {
+					...fallback,
+					...(typeof out === "object" ? out : undefined),
+				};
 
 		const validator =
-			"Output" in module && module.Output instanceof z.ZodObject
-				? module.Output
-				: z.object({});
+			"Output" in module && module.Output instanceof z.ZodType ? module.Output : z.object({});
 		const validation = await validator.spa(output);
 		if (!validation.success) {
 			log.extend("error")("output: %O failed validation: %O", output, validation.error);
