@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.5.1
+
+### Patch Changes
+
+- [#49](https://github.com/JacobLinCool/sveltekit-api/pull/49) [`fcf5b8cfaf545c1cf2e554b32ad567982ab1d95e`](https://github.com/JacobLinCool/sveltekit-api/commit/fcf5b8cfaf545c1cf2e554b32ad567982ab1d95e) Thanks [@DoubleMalt](https://github.com/DoubleMalt)! - Return arrays as JSON arrays instead of objects with the indices as keys
+
 ## 0.5.0
 
 ### Minor Changes
