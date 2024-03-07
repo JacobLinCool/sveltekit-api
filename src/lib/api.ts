@@ -629,7 +629,7 @@ export class API {
 			.slice(0, -1)
 			.join("/")
 			.replace(/^\./, this.base)
-			.replace(/\[(?:\.{3})?(.+)\]/g, "{$1}");
+			.replace(/\[(\.{3})?(.+?)\]/g, "{$2}");
 		const method = parts[parts.length - 1].toUpperCase();
 
 		let module = (await handler()) as APIRoute;
