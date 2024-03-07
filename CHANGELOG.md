@@ -1,5 +1,13 @@
 # sveltekit-api
 
+## 0.5.2
+
+### Patch Changes
+
+- [#54](https://github.com/JacobLinCool/sveltekit-api/pull/54) [`c93ba1bcffea1c03b08b7bb43f6cc6965174fe50`](https://github.com/JacobLinCool/sveltekit-api/commit/c93ba1bcffea1c03b08b7bb43f6cc6965174fe50) Thanks [@Andndre](https://github.com/Andndre)! - fix: parse_module cannot parse routes with more than one params
+
+- [`f543e0936a03817af6d2bda0dcb08118b350d648`](https://github.com/JacobLinCool/sveltekit-api/commit/f543e0936a03817af6d2bda0dcb08118b350d648) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Fix parentheses in path param
+
 ## 0.5.1
 
 ### Patch Changes
