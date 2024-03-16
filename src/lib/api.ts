@@ -467,7 +467,7 @@ export class API {
 		module: object,
 		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const body: Record<string, unknown> = { ...fallback };
+		let body: Record<string, unknown> = { ...fallback };
 
 		// GET, HEAD, DELETE, OPTIONS have no body
 		const method = evt.request.method.toUpperCase();
@@ -525,6 +525,8 @@ export class API {
 		const validation = validator.safeParse(body);
 		if (!validation.success) {
 			throw error(400, `Invalid body.\n${fromZodError(validation.error).message}`);
+		} else {
+			body = validation.data;
 		}
 
 		return body;
@@ -535,7 +537,7 @@ export class API {
 		module: object,
 		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const query: Record<string, unknown> = { ...fallback };
+		let query: Record<string, unknown> = { ...fallback };
 
 		for (const [key, value] of evt.url.searchParams.entries()) {
 			if (query[key]) {
@@ -557,6 +559,8 @@ export class API {
 		const validation = validator.safeParse(query);
 		if (!validation.success) {
 			throw error(400, `Invalid query.\n${fromZodError(validation.error).message}`);
+		} else {
+			query = validation.data;
 		}
 
 		return query;
@@ -567,7 +571,7 @@ export class API {
 		module: object,
 		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const param = { ...fallback, ...evt.params };
+		let param = { ...fallback, ...evt.params };
 
 		log("param: %O", param);
 
@@ -576,6 +580,8 @@ export class API {
 		const validation = validator.safeParse(param);
 		if (!validation.success) {
 			throw error(400, `Invalid param.\n${fromZodError(validation.error).message}`);
+		} else {
+			param = validation.data;
 		}
 
 		return param;
@@ -586,7 +592,7 @@ export class API {
 		module: object,
 		fallback?: Record<never, never>,
 	): Promise<Record<string, unknown>> {
-		const output: Record<string, unknown> | unknown[] = Array.isArray(out)
+		let output: Record<string, unknown> | unknown[] = Array.isArray(out)
 			? out
 			: {
 					...fallback,
@@ -602,6 +608,8 @@ export class API {
 				500,
 				"Output validation failed. Please report this error to the developer.",
 			);
+		} else {
+			output = validation.data;
 		}
 
 		return output;
