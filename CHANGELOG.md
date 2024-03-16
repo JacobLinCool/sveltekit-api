@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.5.3
+
+### Patch Changes
+
+- [#56](https://github.com/JacobLinCool/sveltekit-api/pull/56) [`084b81be8f3c7a26f3eb4d74a25468d71636add4`](https://github.com/JacobLinCool/sveltekit-api/commit/084b81be8f3c7a26f3eb4d74a25468d71636add4) Thanks [@woodyloody](https://github.com/woodyloody)! - Returns data changed by safeParse
+
 ## 0.5.2
 
 ### Patch Changes
