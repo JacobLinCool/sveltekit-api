@@ -213,7 +213,7 @@ export class API {
 
 		const route =
 			this.routes[
-				`${evt.route.id.replace(this.base, ".")}/${evt.request.method.toUpperCase()}`
+				`${evt.route.id.replace(/\(.+\)\//g, "").replace(this.base, ".")}/${evt.request.method.toUpperCase()}`
 			];
 		if (!route) {
 			throw error(404, "Route not found");
@@ -637,7 +637,8 @@ export class API {
 			.slice(0, -1)
 			.join("/")
 			.replace(/^\./, this.base)
-			.replace(/\[(\.{3})?(.+?)\]/g, "{$2}");
+			.replace(/\[(\.{3})?(.+?)\]/g, "{$2}")
+			.replace(/\(.+\)\//g, "");
 		const method = parts[parts.length - 1].toUpperCase();
 
 		let module = (await handler()) as APIRoute;
