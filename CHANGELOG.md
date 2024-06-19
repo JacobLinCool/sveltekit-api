@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.5.4
+
+### Patch Changes
+
+- [#61](https://github.com/JacobLinCool/sveltekit-api/pull/61) [`d8c8764ba22d590b002341212d0e36283e9c313e`](https://github.com/JacobLinCool/sveltekit-api/commit/d8c8764ba22d590b002341212d0e36283e9c313e) Thanks [@plckr](https://github.com/plckr)! - handle group routes
+
 ## 0.5.3
 
 ### Patch Changes
