@@ -100,10 +100,10 @@ export class Endpoint<
 	H extends (
 		input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
 		evt: RequestEvent,
-	) => Promise<z.infer<O>> = (
+	) => Promise<z.input<O>> = (
 		input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
 		evt: RequestEvent,
-	) => Promise<z.infer<O>>,
+	) => Promise<z.input<O>>,
 > implements APIRoute<P, Q, I, O, S, E>
 {
 	constructor(
