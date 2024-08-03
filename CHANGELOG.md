@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.5.5
+
+### Patch Changes
+
+- [#64](https://github.com/JacobLinCool/sveltekit-api/pull/64) [`e72fe18fd372b8ac21d6dd4c9d91ec94e5ec260b`](https://github.com/JacobLinCool/sveltekit-api/commit/e72fe18fd372b8ac21d6dd4c9d91ec94e5ec260b) Thanks [@plckr](https://github.com/plckr)! - Endpoint Output incorrect type
+
 ## 0.5.4
 
 ### Patch Changes
