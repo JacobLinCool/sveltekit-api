@@ -5,8 +5,6 @@ Handles all kinds of SvelteKit data flows in one place, and automatically genera
 ## Features
 
 - [x] `API`: Manage API endpoints and automatically generate OpenAPI documentation
-- [x] `load2api`: Transform a server-side `load` function into an API endpoint
-- [x] `tree`: Build a tree of endpoint routes
 
 ## Installation
 
@@ -143,31 +141,4 @@ import api from "$api";
 export const GET = async (evt) => api.handle(evt);
 export const POST = async (evt) => api.handle(evt);
 export const OPTIONS = async (evt) => api.handle(evt);
-```
-
-### `load2api`
-
-Transforms a server-side `load` function into an API endpoint in a single line.
-
-```ts
-// file: src/routes/api/problem/[...id]/+server.ts
-import { load2api } from "sveltekit-api";
-import { load } from "$routes/problem/[...id]/+page.server";
-
-export const GET = async (evt) => load2api("/problem/[...id]", load, evt);
-```
-
-### `tree`
-
-Build a self-explanatory tree of API endpoints.
-
-```ts
-import { tree } from "sveltekit-api";
-import { json } from "@sveltejs/kit";
-
-export const prerender = true;
-
-export const GET = async () => {
-  return json(await tree(import.meta.glob("./**/*/+server.ts")));
-};
 ```
