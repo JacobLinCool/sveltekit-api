@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.6.0
+
+### Minor Changes
+
+- [`b85af6e3aa8bb691851d83141d3a91a1ce1f0eed`](https://github.com/JacobLinCool/sveltekit-api/commit/b85af6e3aa8bb691851d83141d3a91a1ce1f0eed) Thanks [@JacobLinCool](https://github.com/JacobLinCool)! - Remove load2api and tree, support svelte 5
+
 ## 0.5.5
 
 ### Patch Changes
