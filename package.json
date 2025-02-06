@@ -1,6 +1,6 @@
 {
 	"name": "sveltekit-api",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"description": "Handles all kinds of SvelteKit data flows in one place, and automatically generate OpenAPI documentation.",
 	"license": "MIT",
 	"repository": {

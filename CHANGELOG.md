@@ -1,5 +1,11 @@
 # sveltekit-api
 
+## 0.6.1
+
+### Patch Changes
+
+- [#72](https://github.com/JacobLinCool/sveltekit-api/pull/72) [`1518e995e7da1a8d9ef5964df7385f147e9bc72b`](https://github.com/JacobLinCool/sveltekit-api/commit/1518e995e7da1a8d9ef5964df7385f147e9bc72b) Thanks [@JinIgarashi](https://github.com/JinIgarashi)! - fix: clone evt.request in parse_body so request can be accessible in endpoint function later
+
 ## 0.6.0
 
 ### Minor Changes
