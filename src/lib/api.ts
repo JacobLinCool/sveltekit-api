@@ -474,11 +474,11 @@ export class API {
 		if (["GET", "HEAD", "DELETE", "OPTIONS"].includes(method)) {
 			return body;
 		}
-
+		const clonedRequest = evt.request.clone();
 		// JSON body
-		if (evt.request.headers.get("content-type")?.startsWith("application/json")) {
+		if (clonedRequest.headers.get("content-type")?.startsWith("application/json")) {
 			try {
-				const json = await evt.request.json();
+				const json = await clonedRequest.json();
 				if (typeof json === "object") {
 					Object.assign(body, json);
 				}
@@ -488,12 +488,12 @@ export class API {
 		}
 		// Form body
 		else if (
-			evt.request.headers
+			clonedRequest.headers
 				.get("content-type")
 				?.startsWith("application/x-www-form-urlencoded") ||
-			evt.request.headers.get("content-type")?.startsWith("multipart/form-data")
+			clonedRequest.headers.get("content-type")?.startsWith("multipart/form-data")
 		) {
-			const form = await evt.request.formData();
+			const form = await clonedRequest.formData();
 			for (const [key, value] of form.entries()) {
 				if (body[key]) {
 					const existing = body[key];
@@ -508,13 +508,15 @@ export class API {
 			}
 		}
 		// Text body
-		else if (evt.request.headers.get("content-type")?.startsWith("text/plain")) {
-			const text = await evt.request.text();
+		else if (clonedRequest.headers.get("content-type")?.startsWith("text/plain")) {
+			const text = await clonedRequest.text();
 			body.text = text;
 		}
 		// Binary body
-		else if (evt.request.headers.get("content-type")?.startsWith("application/octet-stream")) {
-			const buffer = await evt.request.arrayBuffer();
+		else if (
+			clonedRequest.headers.get("content-type")?.startsWith("application/octet-stream")
+		) {
+			const buffer = await clonedRequest.arrayBuffer();
 			body.buffer = buffer;
 		}
 
