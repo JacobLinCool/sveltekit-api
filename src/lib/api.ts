@@ -81,12 +81,11 @@ export interface APIRoute<
 	/**
 	 * OpenAPI route config modifier
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	Modifier?: RouteModifier;
 	/**
 	 * Handler
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 	default?: Function;
 }
 
@@ -104,8 +103,7 @@ export class Endpoint<
 		input: Simplify<z.infer<I> & z.infer<Q> & z.infer<P>>,
 		evt: RequestEvent,
 	) => Promise<z.input<O>>,
-> implements APIRoute<P, Q, I, O, S, E>
-{
+> implements APIRoute<P, Q, I, O, S, E> {
 	constructor(
 		{
 			Param,
@@ -593,8 +591,8 @@ export class API {
 		out: unknown,
 		module: object,
 		fallback?: Record<never, never>,
-	): Promise<Record<string, unknown>> {
-		let output: Record<string, unknown> | unknown[] = Array.isArray(out)
+	): Promise<unknown> {
+		let output: unknown = Array.isArray(out)
 			? out
 			: {
 					...fallback,
@@ -603,7 +601,7 @@ export class API {
 
 		const validator =
 			"Output" in module && module.Output instanceof z.ZodType ? module.Output : z.object({});
-		const validation = await validator.spa(output);
+		const validation = await validator.safeParseAsync(await recursive_await(output));
 		if (!validation.success) {
 			log.extend("error")("output: %O failed validation: %O", output, validation.error);
 			throw error(

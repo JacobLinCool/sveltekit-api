@@ -24,17 +24,28 @@ These projects are using SvelteKit-API and can be used as examples:
 
 ### `API`
 
-Add `$api` to your `svelte.config.js`:
+Requires Node.js 22.17 or newer, SvelteKit 3, and Svelte 5. Schemas use Zod 4.
 
-```js
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-  kit: {
-    alias: {
-      "$api": "./src/api",
-    },
-  },
-};
+Add a subpath import to your `package.json`:
+
+```json
+{
+  "imports": {
+    "#api": "./src/api/index.ts"
+  }
+}
+```
+
+Configure SvelteKit in `vite.config.ts`:
+
+```ts
+import adapter from "@sveltejs/adapter-auto";
+import { sveltekit } from "@sveltejs/kit/vite";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [sveltekit({ adapter: adapter() })],
+});
 ```
 
 Create the API endpoints in the structure like [`src/api`](./src/api).
@@ -96,7 +107,7 @@ export const Output = z.object({
   content: z.string(),
   author: z.string(),
   date: z.string(),
-}) satisfies z.ZodSchema<Post>;
+}) satisfies z.ZodType<Post>;
 
 export const Error = {
   404: error(404, "Post not found"),
@@ -126,7 +137,7 @@ Call the API handler and OpenAPI generator in your routes like [`src/routes/api`
 
 ```ts
 // file: src/routes/+server.ts
-import api from "$api";
+import api from "#api";
 import { json } from "@sveltejs/kit";
 
 export const prerender = true;
@@ -136,9 +147,22 @@ export const GET = async (evt) => json(await api.openapi(evt));
 
 ```ts
 // file: src/routes/api/post/+server.ts
-import api from "$api";
+import api from "#api";
 
 export const GET = async (evt) => api.handle(evt);
 export const POST = async (evt) => api.handle(evt);
 export const OPTIONS = async (evt) => api.handle(evt);
 ```
+
+## Development
+
+Use pnpm 12.16.1 (`corepack enable` and `corepack prepare pnpm@12.16.1 --activate`), then run:
+
+```bash
+pnpm install
+pnpm check
+pnpm lint
+pnpm build
+```
+
+Type checking uses TypeScript 7 through `@typescript/native` and `svelte-check --tsgo`. TypeScript 6 remains installed as the compatibility API required by Svelte and ESLint tooling.
