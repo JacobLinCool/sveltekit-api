@@ -400,7 +400,7 @@ export class API {
 		};
 	}
 
-	async openapi(evt?: RequestEvent) {
+	async openapi(evt?: RequestEvent): Promise<object> {
 		const registry = new OpenAPIRegistry();
 
 		for (const route of Object.keys(this.routes)) {
