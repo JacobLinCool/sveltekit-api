@@ -1,81 +1,91 @@
 {
-	"name": "sveltekit-api",
-	"version": "0.6.1",
-	"description": "Handles all kinds of SvelteKit data flows in one place, and automatically generate OpenAPI documentation.",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/JacobLinCool/sveltekit-api.git"
-	},
-	"homepage": "https://github.com/JacobLinCool/sveltekit-api",
-	"svelte": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"type": "module",
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js"
-		}
-	},
-	"files": [
-		"dist",
-		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
-	],
-	"dependencies": {
-		"@asteasolutions/zod-to-openapi": "^6.3.1",
-		"debug": "^4.3.4",
-		"type-fest": "^4.10.2",
-		"zod": "^3.22.4",
-		"zod-validation-error": "^3.0.0"
-	},
-	"peerDependencies": {
-		"@sveltejs/kit": "^1.0.0 || ^2.0.0",
-		"svelte": "^3.0.0 || ^4.0.0 || ^5.0.0"
-	},
-	"devDependencies": {
-		"@changesets/changelog-github": "^0.4.8",
-		"@changesets/cli": "^2.27.1",
-		"@sveltejs/adapter-auto": "^2.1.1",
-		"@sveltejs/package": "^2.2.6",
-		"@sveltejs/vite-plugin-svelte": "^3.0.2",
-		"@types/better-sqlite3": "^7.6.9",
-		"@types/debug": "^4.1.12",
-		"@typescript-eslint/eslint-plugin": "^6.20.0",
-		"@typescript-eslint/parser": "^6.20.0",
-		"changeset": "^0.2.6",
-		"eslint": "^8.56.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-svelte": "^2.35.1",
-		"husky": "^9.0.10",
-		"lint-staged": "^15.2.1",
-		"prettier": "^3.2.4",
-		"prettier-plugin-organize-imports": "^3.2.4",
-		"prettier-plugin-svelte": "^3.1.2",
-		"publint": "^0.2.7",
-		"svelte": "^4.2.9",
-		"svelte-check": "^3.6.3",
-		"tslib": "^2.6.2",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.12"
-	},
-	"scripts": {
-		"prepare": "husky",
-		"dev": "vite dev",
-		"build": "vite build && pnpm run package",
-		"preview": "vite preview",
-		"package": "svelte-kit sync && svelte-package && publint",
-		"prepublishOnly": "pnpm run package",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --ignore-path .gitignore --check . && eslint .",
-		"format": "prettier --ignore-path .gitignore --write .",
-		"changeset": "changeset"
-	},
-	"lint-staged": {
-		"*.{ts,js,json,yaml,yml,svelte,html}": [
-			"prettier --write"
-		]
-	},
-	"packageManager": "pnpm@8.15.1"
+  "name": "sveltekit-api",
+  "version": "0.6.1",
+  "description": "Handles all kinds of SvelteKit data flows in one place, and automatically generate OpenAPI documentation.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacobLinCool/sveltekit-api.git"
+  },
+  "homepage": "https://github.com/JacobLinCool/sveltekit-api",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.test.*",
+    "!dist/**/*.spec.*"
+  ],
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^9.1.0",
+    "debug": "^4.4.3",
+    "type-fest": "^5.10.0",
+    "zod": "^4.6.7",
+    "zod-validation-error": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@sveltejs/kit": "^3.1.1",
+    "svelte": "^5.57.3"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
+    "@sveltejs/adapter-auto": "^8.0.0",
+    "@sveltejs/package": "^3.0.2",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/debug": "^4.1.13",
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
+    "@typescript-eslint/parser": "^8.72.1",
+    "changeset": "^0.2.6",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-svelte": "^3.23.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-svelte": "^4.1.1",
+    "publint": "^0.3.25",
+    "svelte": "^5.57.3",
+    "svelte-check": "^4.7.7",
+    "tslib": "^2.8.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.5",
+    "@sveltejs/kit": "^3.1.1",
+    "@typescript/native": "npm:typescript@^7.0.2"
+  },
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build && pnpm run package",
+    "preview": "vite preview",
+    "package": "svelte-kit sync && svelte-package && publint",
+    "prepublishOnly": "pnpm run package",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --tsgo",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch --tsgo",
+    "lint": "prettier --ignore-path .gitignore --ignore-path .prettierignore --check . && eslint .",
+    "format": "prettier --ignore-path .gitignore --ignore-path .prettierignore --write .",
+    "changeset": "changeset"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,yaml,yml,svelte,html}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=22.17.0"
+  },
+  "imports": {
+    "#lib": "./src/lib/index.ts",
+    "#lib/*": "./src/lib/*",
+    "#api": "./src/api/index.ts"
+  }
 }

@@ -1,5 +1,5 @@
-import { Endpoint } from "$lib/api.js";
-import { z } from "$lib/index.js";
+import { Endpoint } from "#lib/api.js";
+import { z } from "#lib/index.js";
 
 export const Param = z.object({ param: z.string() });
 export const Output = z.object({

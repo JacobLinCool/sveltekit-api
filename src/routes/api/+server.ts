@@ -1,4 +1,4 @@
-import api from "$api/index.js";
+import api from "#api";
 import { json } from "@sveltejs/kit";
 
 export const prerender = true;

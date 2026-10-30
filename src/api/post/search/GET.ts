@@ -1,4 +1,4 @@
-import { Endpoint, z } from "$lib/index.js";
+import { Endpoint, z } from "#lib/index.js";
 import { posts, type Post } from "../../db.js";
 
 export const Query = z.object({
@@ -15,7 +15,7 @@ export const Output = z.object({
 			date: z.string(),
 		}),
 	),
-}) satisfies z.ZodSchema<{ posts: Post[] }>;
+}) satisfies z.ZodType<{ posts: Post[] }>;
 
 export default new Endpoint({ Query, Output }).handle(async (query) => {
 	const q = query.q.toLowerCase();

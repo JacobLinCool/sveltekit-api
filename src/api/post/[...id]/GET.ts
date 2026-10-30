@@ -1,4 +1,4 @@
-import { Endpoint, error, z } from "$lib/index.js";
+import { Endpoint, error, z } from "#lib/index.js";
 import { posts, type Post } from "../../db.js";
 
 export const Query = z.object({
@@ -15,7 +15,7 @@ export const Output = z.object({
 	content: z.string(),
 	author: z.string(),
 	date: z.string(),
-}) satisfies z.ZodSchema<Post>;
+}) satisfies z.ZodType<Post>;
 
 export const Error = {
 	404: error(404, "Post not found"),

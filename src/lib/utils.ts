@@ -3,7 +3,11 @@ export function recursive_await(obj: unknown): unknown {
 		return obj.then(recursive_await);
 	} else if (obj instanceof Array) {
 		return Promise.all(obj.map(recursive_await));
-	} else if (obj instanceof Object) {
+	} else if (
+		obj !== null &&
+		typeof obj === "object" &&
+		(Object.getPrototypeOf(obj) === Object.prototype || Object.getPrototypeOf(obj) === null)
+	) {
 		const keys = Object.keys(obj);
 		const values = Object.values(obj);
 		return Promise.all(values.map(recursive_await)).then((values) => {

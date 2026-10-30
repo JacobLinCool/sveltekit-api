@@ -1,4 +1,4 @@
-import { API } from "$lib/index.js";
+import { API } from "#lib/index.js";
 
 export default new API(import.meta.glob("./**/*.ts"), {
 	openapi: "3.0.0",

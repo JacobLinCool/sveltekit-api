@@ -1,3 +1,3 @@
-import api from "$api/index.js";
+import api from "#api";
 
 export const GET = (evt) => api.handle(evt);
