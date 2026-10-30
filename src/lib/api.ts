@@ -11,6 +11,51 @@ import { z } from "./zod.js";
 
 const log = _log.extend("api");
 
+async function decode_json(request: Request, body: Record<string, unknown>): Promise<void> {
+	try {
+		const value = await request.json();
+		if (typeof value === "object") {
+			Object.assign(body, value);
+		}
+	} catch {
+		throw error(400, "Invalid JSON body");
+	}
+}
+
+function append_form_value(
+	body: Record<string, unknown>,
+	key: string,
+	value: FormDataEntryValue,
+): void {
+	const existing = body[key];
+	if (!existing) {
+		body[key] = value;
+	} else if (Array.isArray(existing)) {
+		existing.push(value);
+	} else {
+		body[key] = [existing, value];
+	}
+}
+
+async function decode_body(request: Request, body: Record<string, unknown>): Promise<void> {
+	const content_type = request.headers.get("content-type") ?? "";
+	if (content_type.startsWith("application/json")) {
+		await decode_json(request, body);
+	} else if (
+		content_type.startsWith("application/x-www-form-urlencoded") ||
+		content_type.startsWith("multipart/form-data")
+	) {
+		const form = await request.formData();
+		for (const [key, value] of form.entries()) {
+			append_form_value(body, key, value);
+		}
+	} else if (content_type.startsWith("text/plain")) {
+		body.text = await request.text();
+	} else if (content_type.startsWith("application/octet-stream")) {
+		body.buffer = await request.arrayBuffer();
+	}
+}
+
 export const METHOD = /^(GET|POST|PUT|DELETE|PATCH|OPTIONS)$/;
 
 /**
@@ -268,9 +313,7 @@ export class API {
 			return res;
 		}
 
-		if (output instanceof Response) {
-			return output;
-		} else if (output instanceof ArrayBuffer) {
+		if (output instanceof ArrayBuffer) {
 			const res = new Response(output, {
 				headers: {
 					"Content-Type": "application/octet-stream",
@@ -472,51 +515,7 @@ export class API {
 		if (["GET", "HEAD", "DELETE", "OPTIONS"].includes(method)) {
 			return body;
 		}
-		const clonedRequest = evt.request.clone();
-		// JSON body
-		if (clonedRequest.headers.get("content-type")?.startsWith("application/json")) {
-			try {
-				const json = await clonedRequest.json();
-				if (typeof json === "object") {
-					Object.assign(body, json);
-				}
-			} catch {
-				throw error(400, "Invalid JSON body");
-			}
-		}
-		// Form body
-		else if (
-			clonedRequest.headers
-				.get("content-type")
-				?.startsWith("application/x-www-form-urlencoded") ||
-			clonedRequest.headers.get("content-type")?.startsWith("multipart/form-data")
-		) {
-			const form = await clonedRequest.formData();
-			for (const [key, value] of form.entries()) {
-				if (body[key]) {
-					const existing = body[key];
-					if (Array.isArray(existing)) {
-						existing.push(value);
-					} else {
-						body[key] = [body[key], value];
-					}
-				} else {
-					body[key] = value;
-				}
-			}
-		}
-		// Text body
-		else if (clonedRequest.headers.get("content-type")?.startsWith("text/plain")) {
-			const text = await clonedRequest.text();
-			body.text = text;
-		}
-		// Binary body
-		else if (
-			clonedRequest.headers.get("content-type")?.startsWith("application/octet-stream")
-		) {
-			const buffer = await clonedRequest.arrayBuffer();
-			body.buffer = buffer;
-		}
+		await decode_body(evt.request.clone(), body);
 
 		log("body: %O", body);
 
